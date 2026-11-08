@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: reservas-db-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: reservas_db
+      TZ: America/Sao_Paulo
+      PGTZ: America/Sao_Paulo
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata_reservas:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d reservas_db"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  pgdata_reservas:
